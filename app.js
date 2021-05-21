@@ -22,6 +22,9 @@ let corsOption = {
   ],
 };
 
+// Utilizar seguridad Cors
+app.use(cors(corsOption));
+
 // Aceptar urlparams
 app.use(
   express.urlencoded({
@@ -41,8 +44,7 @@ app.use(express.static(path.join(__dirname, "./public")));
 // Utilizar seguridad Helmet
 app.use(helmet());
 
-// Utilizar seguridad Cors
-app.use(cors(corsOption));
+
 
 // Error 404
 app.use(function (req, res, next) {

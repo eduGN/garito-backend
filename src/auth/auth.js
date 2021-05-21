@@ -10,7 +10,6 @@ passport.use('login', new JwtStrategy(
       secretOrKey: config.secret,
     },
     async (payload, done) => {
-      console.log("Entra en el payload")
       try {
         const user = await User.findById(payload.sub);
         if (!user) {

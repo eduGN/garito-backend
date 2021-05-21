@@ -42,6 +42,9 @@ router.get("/:username", passport.auth, userController.userDetail)
  // Discography
  router.put("/:username/social", passport.auth, socialController.addSocial) 
 
+ //Delete
+ router.delete("/:username/delete", passport.auth, userController.deleteUser) 
+
 
 
 module.exports = router; 

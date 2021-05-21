@@ -12,7 +12,7 @@ const Schema = new SchemaMongo({
   type: { type: String, default: "artist" },
   info: { type: SchemaMongo.Types.ObjectId, ref: "info" },
   discography: [{ type: SchemaMongo.Types.ObjectId, ref: "album" }],
-  location: { type: String, require: true},
+  location: { type: String, require: true, unique: false},
   social: {
     youtube: String,
     spotify: String,

@@ -1,8 +1,12 @@
 const controller = {};
 const User = require("../models/user");
+const Album = require("../models/album");
+const Member = require("../models/member");
+const Info = require("../models/info");
 const joiSignup = require("../validators/signup")
 const joiLogin = require("../validators/login")
 const authJWT = require("../auth/jwt");
+
 
 controller.signup = async (req, res) => {
  
@@ -223,5 +227,68 @@ controller.getUser = async(req,res) => {
   }
  
  }
+
+ controller.deleteUser = async(req,res) => {
+  const username = req.params.username
+
+  if(username && username == req.user.username){
+
+    try {
+  
+      const user = await User.findById(req.user._id)
+      .populate([
+        {
+        path:'info',
+        model:'info',
+        populate: {
+          path:'members',
+          model:'member'
+        }
+      },
+      {
+       path:'discography',
+       model:'album',
+     }])
+
+     if(user.discography){
+      user.discography.forEach(async(album) => {
+        try {
+          await Album.findByIdAndDelete(album._id)
+        } catch (err) {
+          res.status(500).send(err)
+        }
+      });
+     }
+
+     if(user.info && user.info.members){
+      user.info.members.forEach(async(member) => {
+        try {
+          await Member.findByIdAndDelete(member._id)
+        } catch (err) {
+          res.status(500).send(err)
+        }
+      });
+     }
+
+     if(user.info){
+      await Info.findByIdAndDelete(user.info._id)
+     }
+
+     await User.findByIdAndDelete(user._id)
+     
+      res.status(204).send("Se ha eliminado todo")
+    } catch (err) {
+      console.log(err)
+     res.status(500).send(err);
+
+    }
+
+  } else {
+    res.status(400).send("Falta parámetro o no es igual al usuario logeado");
+  }
+ }
+
+
+
 
 module.exports = controller;
