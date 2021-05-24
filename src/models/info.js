@@ -8,8 +8,9 @@ const InfoSchema = new Schema({
   contact: {
     phone: String,
     web: String,
-    address: String/* ,
-    message: String */
+    address: String, 
+    message: String,
+    email: String
   },
   savedAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

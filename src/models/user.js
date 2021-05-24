@@ -18,9 +18,10 @@ const Schema = new SchemaMongo({
     spotify: String,
     facebook: String,
     instagram: String,
-    gmail : String,
     twitch: String,
-    web:String
+    web:String,
+    soundcloud: String,
+    twitter: String
   },
   photos : [String],
   savedAt: { type: Date, default: Date.now },

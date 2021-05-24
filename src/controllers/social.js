@@ -8,6 +8,10 @@ controller.addSocial = async (req, res) => {
     const facebook= req.body.facebook
     const instagram = req.body.instagram
     const web = req.body.web
+    const twitch = req.body.twitch
+    const soundcloud = req.body.soundcloud
+    const twitter = req.body.twitter
+   
 
     try {
         const profile = await User.findById(req.user._id);
@@ -17,7 +21,10 @@ controller.addSocial = async (req, res) => {
                     spotify: spotify,
                     facebook: facebook,
                     instagram: instagram,
-                    web: web
+                    web: web,
+                    twitch: twitch,
+                    soundcloud:soundcloud,
+                    twitter: twitter
                   }
                   await User.findByIdAndUpdate(req.user._id, {
                     social:social
