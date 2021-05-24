@@ -195,7 +195,8 @@ controller.getUser = async (req, res) => {
 
   if (!username) {
     res.status(400).send("No has colocado un usuario");
-  }
+    return
+  } 
 
   try {
     const user = await User.findOne({ username: username }).populate([
@@ -212,8 +213,9 @@ controller.getUser = async (req, res) => {
         model: "album",
       },
     ]);
-    console.log(user);
-    res.status(200).json(user);
+   if(user) res.status(200).json(user);
+   else res.status(401).send("Error");
+    
   } catch (err) {
     res.status(500).send(err);
   }

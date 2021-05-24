@@ -8,11 +8,11 @@ const schema = Joi.object({
   bio: Joistring,
   members : Joi.array().items(Joistring.alphanum()),
   contact : {
-      phone: Joi.number().integer().min(600000000).max(999999999),
-      web: Joistring.pattern(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/i),
-      address: Joistring.min(6),
-      email: Joistring.email(),
-      message: Joistring
+      phone: Joi.number().integer().min(600000000).max(999999999).allow(null, ''),
+      web: Joistring.pattern(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/i).allow(null, ''),
+      address: Joistring.min(6).allow(null, ''),
+      email: Joistring.email().allow(null, ''),
+      message: Joistring.allow(null, '')
   }
 
 });

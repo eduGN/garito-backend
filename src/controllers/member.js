@@ -29,11 +29,9 @@ controller.addMember = async (req, res) => {
    
         try {
             
-            const member = await Member.find({name:name})
-            console.log(member)
             const info = await Info.findById(req.user.info);
             console.log(info)
-            if (info && !member[0]) {
+            if (info && info.members) {
                   
                 const member = new Member({
                     name: name,
@@ -64,29 +62,7 @@ controller.addMember = async (req, res) => {
              }])
               res.status(200).send(updatedProfile);
       
-            } if (info && member[0]){
-
-               await Member.findByIdAndUpdate(member[0]._id, {
-                name: name,
-                picture: picture,
-                role: role
-              });
-              const updatedProfile = await User.findById(req.user._id).populate([
-                {
-                path:'info',
-                model:'info',
-                populate: {
-                  path:'members',
-                  model:'member'
-                }
-              },
-              {
-               path:'discography',
-               model:'album',
-             }])
-              res.status(200).send(updatedProfile);
-
-            }else {
+            } else {
               console.log("we");
               res.status(400).send("Añade primero información");
             }

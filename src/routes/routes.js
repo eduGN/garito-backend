@@ -20,13 +20,13 @@ router.delete("/profile/:id", profileController.deleteProfile) */
 
 //Users
 
-router.get("/users/:username", userController.getUser)
-router.get("/users", userController.getUsers)
+router.get("/artist/:username", userController.getUser)
+router.get("/artist", userController.getUsers)
 
 // Auth
 router.post("/signup", userController.signup)
 router.post("/login", userController.login)
-router.get("/:username", passport.auth, userController.userDetail)
+router.get("/", passport.auth, userController.userDetail)
 
 // Info
  router.put("/:username/info", passport.auth, infoController.addInfo) 
