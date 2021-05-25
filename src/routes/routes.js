@@ -19,9 +19,9 @@ router.delete("/profile/:id", profileController.deleteProfile) */
 
 
 //Users
+router.get("/artists", userController.getUsers)
+router.get("/:username", userController.getUser)
 
-router.get("/artist/:username", userController.getUser)
-router.get("/artist", userController.getUsers)
 
 // Auth
 router.post("/signup", userController.signup)
@@ -29,21 +29,21 @@ router.post("/login", userController.login)
 router.get("/", passport.auth, userController.userDetail)
 
 // Info
- router.put("/:username/info", passport.auth, infoController.addInfo) 
+ router.put("/artist/info", passport.auth, infoController.addInfo) 
 
 
 // Member
- router.put("/:username/member", passport.auth, memberController.addMember) 
+ router.put("/artist/member", passport.auth, memberController.addMember) 
 
 
  // Discography
- router.put("/:username/album", passport.auth, albumController.addAlbum) 
+ router.put("/artiste/album", passport.auth, albumController.addAlbum) 
 
  // Discography
- router.put("/:username/social", passport.auth, socialController.addSocial) 
+ router.put("/artist/social", passport.auth, socialController.addSocial) 
 
  //Delete
- router.delete("/:username/delete", passport.auth, userController.deleteUser) 
+ router.delete("/artist/delete", passport.auth, userController.deleteUser) 
 
 
 

@@ -118,10 +118,7 @@ controller.login = async (req, res) => {
 
     const dataToken = authJWT.createToken(user);
 
-    return res.send({
-      access_token: dataToken[0],
-      expires_in: dataToken[1]
-    });
+    return res.send({ status: "ok", data: user, access_token:dataToken[0], expires_in: dataToken[1]});
   } catch (err) {
     console.log(err);
     res.status(401).send("Error");
