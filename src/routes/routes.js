@@ -5,6 +5,8 @@ const infoController = require("../controllers/info")
 const memberController = require("../controllers/member")
 const albumController = require("../controllers/album")
 const socialController = require("../controllers/social")
+const mailController = require("../controllers/mailer")
+
 
 /* const profileController = require("../controllers/profile") */
 const passport = require("../auth/auth")
@@ -26,6 +28,8 @@ router.get("/:username", userController.getUser)
 // Auth
 router.post("/signup", userController.signup)
 router.post("/login", userController.login)
+router.post("/send/email",mailController.send)
+router.get("/sendEmailPug",mailController.sendPug)
 router.get("/", passport.auth, userController.userDetail)
 
 // Info

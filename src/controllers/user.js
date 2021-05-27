@@ -196,17 +196,24 @@ controller.updateProfilePic = async (req, res) => {
 controller.getUsers = async (req, res) => {
   const location = req.query.location;
   const name = req.query.name;
-  const genre = req.query.genre;
+  /* const genre = req.query.genre; */
 
   console.log(name);
   console.log(location);
-  console.log(genre);
+  /* console.log(genre); */
 
   try {
-    let query = { $or: [] };
-    if (!name && !location) query = {};
-    if (location) query.$or.push({ location: new RegExp(location, "i") });
-    if (name) query.$or.push({ artist_name: new RegExp(name, "i") });
+    let query = { $and: [] };
+    if (!name && !location) query = null;
+    if (location && location=="all") query.$and.push({ location: new RegExp("", "i") });
+    if (location && location!="all") query.$and.push({ location: new RegExp(location, "i") });
+    if (name && name=="all") query.$and.push({ artist_name: new RegExp("", "i") });
+    if (name && name!="all") query.$and.push({ artist_name: new RegExp(name, "i") });
+
+    if(!query) {
+      res.status(204).send("not users found")
+      return
+    }
 
     console.log("query", query);
 
@@ -227,6 +234,7 @@ controller.getUsers = async (req, res) => {
     console.log(users);
     res.status(200).send(users);
   } catch (err) {
+    console.log(err)
     res.status(500).send(err);
   }
 };
