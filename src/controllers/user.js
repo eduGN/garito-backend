@@ -26,11 +26,25 @@ controller.signup = async (req, res) => {
   const location = req.body.location;
 
   try {
-    const existUsername = await User.findOne({ email: username });
+    const existUsername = await User.findOne({ username: username });
     const existEmail = await User.findOne({ email: email });
+    const existName = await User.findOne({ artist_name: artist_name });
 
-    if (existUsername || existEmail) {
-      res.status(401).send("Usuario ya existe");
+    const errors = [];
+
+    if (existName) {
+      errors.push("artist name already exists");
+    }
+    if (existUsername) {
+      errors.push("username already exists");
+    }
+
+    if (existEmail) {
+      errors.push("email already exists");
+    }
+
+    if (errors.length > 0) {
+      res.status(401).send(errors);
       return;
     }
     const social = {
@@ -41,7 +55,7 @@ controller.signup = async (req, res) => {
       twitch: "",
       web: "",
       soundcloud: "",
-      twitter:""
+      twitter: "",
     };
 
     const user = new User({
@@ -50,7 +64,7 @@ controller.signup = async (req, res) => {
       email: email,
       password: password,
       location: location,
-      social: social
+      social: social,
     });
     await user.save();
     const data = await User.findOne({ username: username }).populate([
@@ -68,7 +82,12 @@ controller.signup = async (req, res) => {
       },
     ]);
     const dataToken = authJWT.createToken(user);
-    res.send({ status: "ok", data: data, access_token:dataToken[0], expires_in: dataToken[1]});
+    res.send({
+      status: "ok",
+      data: data,
+      access_token: dataToken[0],
+      expires_in: dataToken[1],
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
@@ -107,18 +126,23 @@ controller.login = async (req, res) => {
     ]);
 
     if (!user) {
-      res.status(401).send("Usuario no existe en la base de datos");
+      res.status(401).send("wrong username");
       return;
     }
     const validate = await user.isValidPassword(password);
     if (!validate) {
-      res.status(401).send("Contraseña Incorrecta");
+      res.status(401).send("wrong password");
       return;
     }
 
     const dataToken = authJWT.createToken(user);
 
-    return res.send({ status: "ok", data: user, access_token:dataToken[0], expires_in: dataToken[1]});
+    return res.send({
+      status: "ok",
+      data: user,
+      access_token: dataToken[0],
+      expires_in: dataToken[1],
+    });
   } catch (err) {
     console.log(err);
     res.status(401).send("Error");
@@ -149,12 +173,34 @@ controller.userDetail = async (req, res) => {
   }
 };
 
+controller.updateProfilePic = async (req, res) => {
+  const profilePic = req.body.profilePic;
+  try {
+    const profile = await User.findById(req.user._id);
+    if (profile) {
+      await User.findByIdAndUpdate(req.user._id, {
+        profile_pic: profilePic,
+      });
+
+      const updatedProfile = await User.findById(req.user._id);
+      res.status(200).send(updatedProfile);
+    } else {
+      console.log("we");
+      res.status(400).send();
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
 controller.getUsers = async (req, res) => {
   const location = req.query.location;
   const name = req.query.name;
+  const genre = req.query.genre;
 
   console.log(name);
   console.log(location);
+  console.log(genre);
 
   try {
     let query = { $or: [] };
@@ -188,12 +234,10 @@ controller.getUsers = async (req, res) => {
 controller.getUser = async (req, res) => {
   const username = req.params.username;
 
-  console.log(username);
-
   if (!username) {
     res.status(400).send("No has colocado un usuario");
-    return
-  } 
+    return;
+  }
 
   try {
     const user = await User.findOne({ username: username }).populate([
@@ -210,9 +254,8 @@ controller.getUser = async (req, res) => {
         model: "album",
       },
     ]);
-   if(user) res.status(200).json(user);
-   else res.status(401).send("Error");
-    
+    if (user) res.status(200).json(user);
+    else res.status(401).send("Error");
   } catch (err) {
     res.status(500).send(err);
   }
@@ -266,7 +309,6 @@ controller.deleteUser = async (req, res) => {
 
       res.status(204).send("Se ha eliminado todo");
     } catch (err) {
-      console.log(err);
       res.status(500).send(err);
     }
   } else {

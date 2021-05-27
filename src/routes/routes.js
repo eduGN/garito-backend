@@ -35,15 +35,25 @@ router.get("/", passport.auth, userController.userDetail)
 // Member
  router.put("/artist/member", passport.auth, memberController.addMember) 
 
+ // Member Delete
+ router.delete("/artist/member/:id", passport.auth, memberController.deleteMember) 
+
 
  // Discography
- router.put("/artiste/album", passport.auth, albumController.addAlbum) 
+ router.put("/artist/album", passport.auth, albumController.addAlbum) 
 
- // Discography
+  // Discography Delete
+  router.delete("/artist/album/:id", passport.auth, albumController.deleteAlbum) 
+
+ // Social
  router.put("/artist/social", passport.auth, socialController.addSocial) 
 
  //Delete
  router.delete("/artist/delete", passport.auth, userController.deleteUser) 
+
+ //ProfilePic
+ router.put("/artist/profilepic", passport.auth, userController.updateProfilePic) 
+
 
 
 

@@ -4,11 +4,10 @@ const SchemaMongo = mongoose.Schema;
 
 const Schema = new SchemaMongo({
   artist_name: { type: String, require: true, unique: true },
-
   username: { type: String, require: true, unique: true },
   email: { type: String, require: true, unique: true },
   password: { type: String, require: true },
-
+  profile_pic:{type: String, default:""},
   type: { type: String, default: "artist" },
   info: { type: SchemaMongo.Types.ObjectId, ref: "info" },
   discography: [{ type: SchemaMongo.Types.ObjectId, ref: "album" }],
